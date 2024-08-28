@@ -35,3 +35,55 @@ It provides a RESTful API to calculate rewards and simulate asynchronous data fe
        1 point per dollar between$50 and $100
     Amount less than $50
           1 point per dollar between$50 and $100
+
+
+# Technical Documentation
+1.1 Database
+    Database:
+    
+    Type: MySQL (or Oracle, depending on your project)
+    Tables:
+    transactions
+    id (Primary Key, Auto-increment)
+    customer_id (Foreign Key)
+    amount (Decimal)
+    date (Date)
+
+Flow
+    Application Flow:
+    
+    Input: API calls with transaction data or request for rewards.
+    Processing:
+    API Layer: Receives and processes requests.
+    Service Layer: Contains business logic to calculate rewards.
+    Database Interaction: Fetches and stores data.
+    Output: Returns calculated rewards or error messages.
+    Exception Handling: Global exception handler manages any unforeseen errors.
+
+[Client Request] → [Controller] → [Service] → [Repository] → [Database]
+↑                         ↓           ↑                 ↓
+[Error Handling] ← [Global Exception Handler] ← [Logging]
+
+
+API Documentation
+    API Endpoints:
+    
+        Calculate Rewards
+        
+        Endpoint: /api/rewards/calculate
+        Method: POST
+        Request Body: JSON array of transactions.
+        Response: Total reward points.
+        Errors:
+        400 Bad Request: Invalid request format.
+        Calculate Monthly Rewards
+        
+        Endpoint: /api/rewards/customer/{customerId}/monthly/{month}
+        Method: GET
+        Parameters:
+        customerId: Long
+        month: String (format: yyyy-MM)
+        Response: Total reward points for the specified month.
+        Errors:
+        400 Bad Request: Invalid month format.
+        404 Not Found: Customer or transactions not found.

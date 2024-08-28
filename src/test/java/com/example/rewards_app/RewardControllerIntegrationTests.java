@@ -60,9 +60,21 @@ public class RewardControllerIntegrationTests {
     }
 
     @Test
+    public void testCalculateRewards_InvalidAmount() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/rewards/calculate")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("[{\"customerId\":1, \"amount\":\"invalid\", \"date\":\"2024-08-01\"}]"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string("Invalid input data format"));
+    }
+
+    @Test
     public void testCalculateMonthlyRewards_InvalidMonthFormat() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/rewards/customer/1/monthly/invalid-month")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string("Invalid month format"));
     }
+
+
 }
